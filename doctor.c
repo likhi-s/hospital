@@ -8,7 +8,7 @@
 
 #define USER_ID "doctor_user"
 #define USER_PASSWORD "doctor@123"
-extern doctor *doctorHead =NULL;
+doctor *doctorHead =NULL;
 doctor *doctorNode, *doctorTemp;
 
 void loginAsDoctorManagementUser()
@@ -129,7 +129,7 @@ void addDoctor()
             doctorTemp->next = doctorNode;
         }
         printf("Doctor registered successfully!\n");
-        free(doctorTemp);
+        //free(doctorTemp);
     }
 }
 
