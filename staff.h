@@ -11,7 +11,7 @@ typedef struct staff
     struct staff *next;
 }staff;
 
-staff *staffHead ;
+
 
 enum StaffManagementMenu
 {

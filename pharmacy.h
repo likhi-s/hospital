@@ -10,7 +10,7 @@ typedef struct pharmacy
     char medicineDosage[100];
     struct pharmacy *next;
 }pharmacy;
-pharmacy *pharmacyHead ;
+
 
 enum PharmacyMenuOption
 {

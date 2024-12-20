@@ -12,7 +12,7 @@ typedef struct roomManagement
     float roomFee;
     struct roomManagement *next;
 }room;
-room *roomHead;
+
 
 enum RoomManagementOptions
 {

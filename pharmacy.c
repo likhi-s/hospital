@@ -6,7 +6,7 @@
 #define USER_ID "pharmacy_user"
 #define USER_PASSWORD "pharmacy@123"
 
-extern pharmacy *pharmacyHead = NULL;
+pharmacy *pharmacyHead = NULL;
 pharmacy *pharmacyTemp, *pharmacyNode;
 
 void loginAsPharmacyManagementUser()
@@ -126,7 +126,7 @@ void addMedicine()
             pharmacyTemp->next = pharmacyNode;
         }
         printf("Medicine registered successfully!\n");
-        free(pharmacyTemp);
+
     }
 }
 

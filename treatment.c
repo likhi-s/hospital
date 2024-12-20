@@ -120,7 +120,7 @@ void addTreatment()
             treatmentTemp->next = treatmentNode;
         }
         printf("treatment registered successfully!\n");
-        free(treatmentTemp);
+
     }
 }
 

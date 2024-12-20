@@ -31,3 +31,9 @@
 147	285	7563830844541714	Hospital_management_project.exe	56ba43f652fcc59b
 30	111	7563831535638653	CMakeFiles/Hospital_management_project.dir/doctor.c.obj	64fb8293c24d8d9
 111	211	7563831536444214	Hospital_management_project.exe	56ba43f652fcc59b
+52	188	7563834151679252	CMakeFiles/Hospital_management_project.dir/pharmacy.c.obj	d4c7bcc62bec21e4
+41	215	7563834151488293	CMakeFiles/Hospital_management_project.dir/staff.c.obj	1ae3f5541446a293
+34	217	7563834151488293	CMakeFiles/Hospital_management_project.dir/doctor.c.obj	64fb8293c24d8d9
+47	217	7563834151488293	CMakeFiles/Hospital_management_project.dir/treatment.c.obj	226ea66ff79125d9
+59	225	7563834151733777	CMakeFiles/Hospital_management_project.dir/room.c.obj	aa46d41f7ff142a5
+226	340	7563834153401273	Hospital_management_project.exe	56ba43f652fcc59b

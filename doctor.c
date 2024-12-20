@@ -129,7 +129,7 @@ void addDoctor()
             doctorTemp->next = doctorNode;
         }
         printf("Doctor registered successfully!\n");
-        //free(doctorTemp);
+
     }
 }
 
