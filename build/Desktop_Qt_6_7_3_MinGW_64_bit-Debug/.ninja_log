@@ -1,0 +1,20 @@
+# ninja log v6
+35	310	7563815174727726	CMakeFiles/Hospital_management_project.dir/staff.c.obj	1ae3f5541446a293
+16	142	7563815174571298	CMakeFiles/Hospital_management_project.dir/main.c.obj	ff477e87518428f6
+121	229	7563818025069767	Hospital_management_project.exe	56ba43f652fcc59b
+32	120	7563818024095069	CMakeFiles/Hospital_management_project.dir/patient.c.obj	c6269a67e79a7901
+83	323	7563815175354939	CMakeFiles/Hospital_management_project.dir/pharmacy.c.obj	d4c7bcc62bec21e4
+29	284	7563815174727726	CMakeFiles/Hospital_management_project.dir/doctor.c.obj	64fb8293c24d8d9
+95	326	7563815175354939	CMakeFiles/Hospital_management_project.dir/room.c.obj	aa46d41f7ff142a5
+58	314	7563815175042270	CMakeFiles/Hospital_management_project.dir/treatment.c.obj	226ea66ff79125d9
+2	14	7563815173651926	clean	8cb419a5fec24d95
+26	45	7563819028381183	clean	8cb419a5fec24d95
+18	198	7563819029394070	CMakeFiles/Hospital_management_project.dir/main.c.obj	ff477e87518428f6
+27	257	7563819029549906	CMakeFiles/Hospital_management_project.dir/patient.c.obj	c6269a67e79a7901
+33	259	7563819029549906	CMakeFiles/Hospital_management_project.dir/doctor.c.obj	64fb8293c24d8d9
+40	260	7563819029706184	CMakeFiles/Hospital_management_project.dir/staff.c.obj	1ae3f5541446a293
+57	260	7563819029862411	CMakeFiles/Hospital_management_project.dir/pharmacy.c.obj	d4c7bcc62bec21e4
+48	261	7563819029706184	CMakeFiles/Hospital_management_project.dir/treatment.c.obj	226ea66ff79125d9
+75	278	7563819030018728	CMakeFiles/Hospital_management_project.dir/room.c.obj	aa46d41f7ff142a5
+278	385	7563819032138679	Hospital_management_project.exe	56ba43f652fcc59b
+25	36	7563819141873890	clean	8cb419a5fec24d95
