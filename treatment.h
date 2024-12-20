@@ -8,7 +8,7 @@ typedef struct treatment
     int treatmentDuration;//in days
     struct treatment *next;
 }treatment;
-treatment *treatmentHead ;
+
 
 enum TreatmentManagementOptions
 {

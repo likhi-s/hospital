@@ -125,7 +125,7 @@ void addStaff()
             staffTemp->next = staffNode;
         }
         printf("staff registered successfully!\n");
-        free(staffTemp);
+
     }
 }
 

@@ -126,7 +126,7 @@ void addRoom()
             roomTemp->next = roomNode;
         }
         printf("Medicine registered successfully!\n");
-        free(roomTemp);
+
     }
 }
 
