@@ -4,6 +4,7 @@
 int main()
 {
     printf("Hello World!\n");
-    loginAsPatientManagementUser();
+
+    loginAsDoctorManagementUser();
     return 0;
 }

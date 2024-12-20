@@ -13,7 +13,7 @@ typedef struct doctor
     struct doctor *next;
 } doctor;
 
-doctor *doctorHead ;
+
 
 enum DoctorManagementMenu
 {
