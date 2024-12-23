@@ -22,6 +22,7 @@ enum RoomManagementOptions
     SEARCH_ROOM_BY_ID,
     SEARCH_ROOM_BY_TYPE,
     CHECK_ROOM_AVAILABILITY,
+    SORT_BY_ROOM_ID,
     EXIT_ROOM_MANAGEMENT
 };
 
@@ -42,6 +43,7 @@ void displayRoomDetails();
 void searchByRoomId();
 void searchByRoomType();
 void checkAvailability();
+void sortByRoomId();
 
 
 #endif // ROOM_H

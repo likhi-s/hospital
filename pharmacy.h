@@ -20,6 +20,7 @@ enum PharmacyMenuOption
     SEARCH_MEDICINE_BY_ID,
     SEARCH_MEDICINE_BY_NAME,
     CHECK_STOCK,
+    SORT_BY_MEDICINE_ID,
     EXIT_PHARMACY_MANAGEMENT
 };
 enum MedicineDetailOption
@@ -38,6 +39,7 @@ void displayMedicineDetails();
 void searchByMedicineId();
 void searchByMedicineName();
 void checkMedicineStock();
+void sortByMedicineId();
 
 #endif // PHARMACY_H
 

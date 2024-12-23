@@ -24,7 +24,7 @@ void loginAsRoomManagementUser()
     {
         while (true) {
             printf("\n--- Room Management System ---\n");
-            printf("1. Add Room\n2. Update Room Details\n3. Display Available Rooms\n4. Search Room by ID\n5. Search Room by Type\n6. Check Room Availability\n7. Exit Room Management\n");
+            printf("1. Add Room\n2. Update Room Details\n3. Display Available Rooms\n4. Search Room by ID\n5. Search Room by Type\n6. Check Room Availability\n7. Sort Room By Id\n8. Exit Room Management\n");
             printf("Enter your option: ");
             scanf("%d", &option);
 
@@ -49,6 +49,9 @@ void loginAsRoomManagementUser()
                 break;
             case CHECK_ROOM_AVAILABILITY:
                 checkAvailability();
+                break;
+            case SORT_BY_ROOM_ID:
+                sortByRoomId();
                 break;
             case EXIT_ROOM_MANAGEMENT:
                 printf("Exiting from Room Management menu.\n");
@@ -125,7 +128,7 @@ void addRoom()
             roomNode->next = roomTemp->next;
             roomTemp->next = roomNode;
         }
-        printf("Medicine registered successfully!\n");
+        printf("Room registered successfully!\n");
 
     }
 }
@@ -198,7 +201,7 @@ void displayRoomDetails()
     }
 
     roomTemp = roomHead;
-    printf("\n--- Room Details ---\n");
+    printf("\n--- Rooms sorted by Type(icu/general/private) ---\n");
     while (roomTemp != NULL)
     {
         printf("Room ID: %d\n", roomTemp->roomId);
@@ -207,6 +210,7 @@ void displayRoomDetails()
         printf("Available Beds: %d\n", roomTemp->availableBeds);
         printf("Bed Status: %s\n", roomTemp->bedStatus);
         printf("Room Fee: %f\n", roomTemp->roomFee);
+        printf("\n");
         roomTemp = roomTemp->next;
     }
 }
@@ -228,6 +232,7 @@ void searchByRoomId()
             printf("Available Beds: %d\n", roomTemp->availableBeds);
             printf("Bed Status: %s\n", roomTemp->bedStatus);
             printf("Room Fee: %f\n", roomTemp->roomFee);
+            printf("\n");
             searchIdFound = 1;
             break;
         }
@@ -259,6 +264,7 @@ void searchByRoomType()
             printf("Available Beds: %d\n", roomTemp->availableBeds);
             printf("Bed Status: %s\n", roomTemp->bedStatus);
             printf("Room Fee: %f\n", roomTemp->roomFee);
+            printf("\n");
             searchTypeFound = 1;
             break;
         }
@@ -294,5 +300,123 @@ void checkAvailability()
     if (!availabilityFound)
     {
         printf("Room with ID %d not found.\n", id);
+    }
+}
+
+void sortByRoomId()
+{
+    if (roomHead == NULL)
+    {
+        printf("No rooms found.\n");
+        return;
+    }
+
+    room *tempHead = NULL, *tempTail = NULL, *current = roomHead;
+
+
+    while (current != NULL)
+    {
+        room *newNode = (room *)malloc(sizeof(room));
+        if (!newNode)
+        {
+            printf("Memory allocation failed\n");
+            return;
+        }
+
+        *newNode = *current;
+        newNode->next = NULL;
+
+        if (tempHead == NULL)
+        {
+            tempHead = newNode;
+            tempTail = newNode;
+        }
+        else
+        {
+            tempTail->next = newNode;
+            tempTail = newNode;
+        }
+
+        current = current->next;
+    }
+
+    room *sortedList = NULL;
+
+
+    room *splitList(room *head)
+    {
+        room *slow = head, *fast = head->next;
+        while (fast != NULL && fast->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        room *middle = slow->next;
+        slow->next = NULL;
+        return middle;
+    }
+
+
+    room *mergeLists(room *left, room *right)
+    {
+        room dummy;
+        room *tail = &dummy;
+        dummy.next = NULL;
+
+        while (left != NULL && right != NULL)
+        {
+            if (left->roomId < right->roomId)
+            {
+                tail->next = left;
+                left = left->next;
+            }
+            else
+            {
+                tail->next = right;
+                right = right->next;
+            }
+            tail = tail->next;
+        }
+        tail->next = (left != NULL) ? left : right;
+        return dummy.next;
+    }
+
+
+    room *mergeSort(room *head)
+    {
+        if (head == NULL || head->next == NULL)
+        {
+            return head;
+        }
+
+        room *middle = splitList(head);
+        room *left = mergeSort(head);
+        room *right = mergeSort(middle);
+        return mergeLists(left, right);
+    }
+
+    sortedList = mergeSort(tempHead);
+
+
+    printf("--- Rooms Sorted by ID ---\n");
+    room *temp = sortedList;
+    while (temp != NULL)
+    {
+        printf("Room ID: %d\n",temp->roomId);
+        printf("Room Type: %s\n", temp->roomType);
+        printf("Total Beds: %d\n", temp->bedCount);
+        printf("Available Beds: %d\n", temp->availableBeds);
+        printf("Bed Status: %s\n", temp->bedStatus);
+        printf("Room Fee: %f\n", temp->roomFee);
+        printf("\n");
+        temp = temp->next;
+    }
+
+
+    while (sortedList != NULL)
+    {
+        room *temp = sortedList;
+        sortedList = sortedList->next;
+        free(temp);
     }
 }

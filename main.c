@@ -1,10 +1,9 @@
 #include <stdio.h>
-#include "patient.h"
+#include "room.h"
 
 int main()
 {
     printf("Hello World!\n");
-
-    loginAsDoctorManagementUser();
+    loginAsRoomManagementUser();
     return 0;
 }

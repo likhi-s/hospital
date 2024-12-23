@@ -1,15 +1,14 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include "doctor.h"
 
-
 #define USER_ID "doctor_user"
 #define USER_PASSWORD "doctor@123"
-doctor *doctorHead =NULL;
-doctor *doctorNode, *doctorTemp;
+
+doctor *doctorHead = NULL;
+doctor *doctorTemp, *doctorNode;
 
 void loginAsDoctorManagementUser()
 {
@@ -27,19 +26,17 @@ void loginAsDoctorManagementUser()
         while (true)
         {
             printf("\n--- Doctor Management System ---\n");
-            printf("1. Add doctor\n2. Update doctor details\n3. Display Available Doctors\n4. Search Doctor by ID\n5. Search Doctor by Specialization\n6. Exit from Doctor management\n");
+            printf("1. Register Doctor\n2. Update Doctor Details\n3. Display Available Doctors\n4. Search Doctor by ID\n5. Search Doctor by Specialization\n6. Sort Doctors by ID\n7. Exit from Doctor Management\n");
             printf("Enter your option: ");
             scanf("%d", &option);
 
             switch (option)
             {
             case ADD_DOCTOR:
-                addDoctor();
-                //saveData();
+                registerDoctor();
                 break;
             case UPDATE_DOCTOR_DETAILS:
                 updateDoctorDetails();
-                //saveData();
                 break;
             case DISPLAY_AVAILABLE_DOCTORS:
                 displayDoctorDetails();
@@ -49,6 +46,9 @@ void loginAsDoctorManagementUser()
                 break;
             case SEARCH_DOCTOR_BY_SPECIALIZATION:
                 searchByDoctorSpecialization();
+                break;
+            case SORT_DOCTORS_BY_ID:
+                sortDoctorsById();
                 break;
             case EXIT_DOCTOR_MANAGEMENT:
                 printf("Exiting from Doctor Management menu.\n");
@@ -65,7 +65,7 @@ void loginAsDoctorManagementUser()
     }
 }
 
-void addDoctor()
+void registerDoctor()
 {
     doctor *doctorNode = (doctor *)malloc(sizeof(doctor));
     if (!doctorNode)
@@ -73,8 +73,7 @@ void addDoctor()
         printf("Memory allocation failed!\n");
         return;
     }
-
-    doctorNode->next  = NULL;
+    doctorNode->next = NULL;
 
     printf("Enter Doctor ID: ");
     scanf("%d", &doctorNode->doctorId);
@@ -95,24 +94,24 @@ void addDoctor()
     {
         printf("Doctor with ID %d already exists....try again\n", doctorNode->doctorId);
         free(doctorNode);
-        addDoctor();
+        registerDoctor();
     }
     else
     {
         printf("Enter Doctor Name: ");
         scanf(" %[^\n]", doctorNode->doctorName);
-        printf("Enter Doctor Specialization: ");
+        printf("Enter Specialization: ");
         scanf(" %[^\n]", doctorNode->doctorSpecialization);
-        printf("Enter Doctor Consultation Fee: ");
+        printf("Enter Consultation Fee: ");
         scanf("%f", &doctorNode->doctorConsultationFee);
-        printf("Enter Doctor Contact Number: ");
+        printf("Enter Contact Number: ");
         scanf("%s", doctorNode->doctorContactNumber);
-        printf("Enter Doctor Experience (in years): ");
+        printf("Enter Experience (years): ");
         scanf("%d", &doctorNode->doctorExperience);
-        printf("Enter Doctor Qualification: ");
+        printf("Enter Qualification: ");
         scanf(" %[^\n]", doctorNode->doctorQualification);
 
-        if (doctorHead == NULL|| strcasecmp(doctorHead->doctorName, doctorNode->doctorName) > 0)
+        if (doctorHead == NULL || strcasecmp(doctorHead->doctorName, doctorNode->doctorName) > 0)
         {
             doctorNode->next = doctorHead;
             doctorHead = doctorNode;
@@ -120,8 +119,7 @@ void addDoctor()
         else
         {
             doctorTemp = doctorHead;
-
-            while(doctorTemp->next != NULL&& strcasecmp(doctorTemp->next->doctorName, doctorNode->doctorName) < 0)
+            while (doctorTemp->next != NULL && strcasecmp(doctorTemp->next->doctorName, doctorNode->doctorName) < 0)
             {
                 doctorTemp = doctorTemp->next;
             }
@@ -129,7 +127,6 @@ void addDoctor()
             doctorTemp->next = doctorNode;
         }
         printf("Doctor registered successfully!\n");
-
     }
 }
 
@@ -148,9 +145,9 @@ void updateDoctorDetails()
         {
             doctorFound = 1;
 
-            printf("Updating details for Dr. %s...\n", doctorTemp->doctorName);
+            printf("Updating details for %s...\n", doctorTemp->doctorName);
             printf("Which details do you want to update?\n");
-            printf("1. Update Doctor Name\n2. Update Specialization\n3. Update Consultation Fee\n4. Update Contact Number\n5. Update Experience\n6. Update Qualification\n");
+            printf("1. Update Name\n2. Update Specialization\n3. Update Consultation Fee\n4. Update Contact Number\n5. Update Experience\n6. Update Qualification\n");
             printf("Enter your choice: ");
             scanf("%d", &choice);
 
@@ -205,7 +202,7 @@ void displayDoctorDetails()
     }
 
     doctorTemp = doctorHead;
-    printf("\n--- Doctor Details ---\n");
+    printf("--- Doctor Sorted by Name ---\n");
     while (doctorTemp != NULL)
     {
         printf("Doctor ID: %d\n", doctorTemp->doctorId);
@@ -215,6 +212,7 @@ void displayDoctorDetails()
         printf("Contact Number: %s\n", doctorTemp->doctorContactNumber);
         printf("Experience: %d years\n", doctorTemp->doctorExperience);
         printf("Qualification: %s\n", doctorTemp->doctorQualification);
+        printf("\n");
         doctorTemp = doctorTemp->next;
     }
 }
@@ -230,19 +228,19 @@ void searchByDoctorId()
     {
         if (doctorTemp->doctorId == id)
         {
-            printf("\n--- Doctor Found ---\n");
+            printf("--- Doctor Found ---\n");
             printf("Name: %s\n", doctorTemp->doctorName);
             printf("Specialization: %s\n", doctorTemp->doctorSpecialization);
             printf("Consultation Fee: %.2f\n", doctorTemp->doctorConsultationFee);
             printf("Contact Number: %s\n", doctorTemp->doctorContactNumber);
             printf("Experience: %d years\n", doctorTemp->doctorExperience);
             printf("Qualification: %s\n", doctorTemp->doctorQualification);
+            printf("\n");
             searchIdFound = 1;
             break;
         }
         doctorTemp = doctorTemp->next;
     }
-
     if (!searchIdFound)
     {
         printf("Doctor with ID %d not found.\n", id);
@@ -262,7 +260,7 @@ void searchByDoctorSpecialization()
     {
         if (strcasecmp(specialization, doctorTemp->doctorSpecialization) == 0)
         {
-            printf("\n--- Doctor Found ---\n");
+            printf("--- Doctor Found ---\n");
             printf("Doctor ID: %d\n", doctorTemp->doctorId);
             printf("Name: %s\n", doctorTemp->doctorName);
             printf("Specialization: %s\n", doctorTemp->doctorSpecialization);
@@ -270,6 +268,7 @@ void searchByDoctorSpecialization()
             printf("Contact Number: %s\n", doctorTemp->doctorContactNumber);
             printf("Experience: %d years\n", doctorTemp->doctorExperience);
             printf("Qualification: %s\n", doctorTemp->doctorQualification);
+            printf("\n");
             searchSpecializationFound = 1;
             break;
         }
@@ -281,3 +280,109 @@ void searchByDoctorSpecialization()
         printf("Doctor with Specialization '%s' not found.\n", specialization);
     }
 }
+
+void sortDoctorsById()
+{
+    if (doctorHead == NULL)
+    {
+        printf("No doctors found.\n");
+        return;
+    }
+    doctor *tempHead = NULL, *tempTail = NULL, *current= doctorHead;
+    while(current != NULL)
+    {
+        doctor *newNode = (doctor *) malloc(sizeof(doctor));
+        if(!newNode)
+        {
+            printf("Memory Alloctaion Failed\n");
+            return;
+        }
+        *newNode = *current;
+        newNode->next = NULL;
+        if (tempHead == NULL)
+        {
+            tempHead = newNode;
+            tempTail = newNode;
+        }
+        else
+        {
+            tempTail->next = newNode;
+            tempTail = newNode;
+        }
+
+        current = current->next;
+    }
+
+    doctor *sortedList = NULL;
+
+    doctor *splitList(doctor *head)
+    {
+        doctor *slow = head, *fast = head->next;
+        while (fast != NULL && fast->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        doctor *middle = slow->next;
+        slow->next = NULL;
+        return middle;
+    }
+
+    doctor *mergeLists(doctor *left, doctor *right)
+    {
+        doctor dummy;
+        doctor *tail = &dummy;
+        dummy.next = NULL;
+
+        while (left != NULL && right != NULL)
+        {
+            if (left->doctorId < right->doctorId)
+            {
+                tail->next = left;
+                left = left->next;
+            }
+            else
+            {
+                tail->next = right;
+                right = right->next;
+            }
+            tail = tail->next;
+        }
+        tail->next = (left != NULL) ? left : right;
+        return dummy.next;
+    }
+
+
+    doctor *mergeSort(doctor *head)
+    {
+        if (head == NULL || head->next == NULL)
+        {
+            return head;
+        }
+
+        doctor *middle = splitList(head);
+        doctor *left = mergeSort(head);
+        doctor *right = mergeSort(middle);
+        return mergeLists(left, right);
+    }
+
+
+    sortedList = mergeSort(tempHead);
+
+
+    printf("--- Doctors Sorted by ID ---\n");
+    doctor *doctorTemp = sortedList;
+    while (doctorTemp != NULL)
+    {
+        printf("Doctor ID: %d\n", doctorTemp->doctorId);
+        printf("Name: %s\n", doctorTemp->doctorName);
+        printf("Specialization: %s\n", doctorTemp->doctorSpecialization);
+        printf("Consultation Fee: %.2f\n", doctorTemp->doctorConsultationFee);
+        printf("Contact Number: %s\n", doctorTemp->doctorContactNumber);
+        printf("Experience: %d years\n", doctorTemp->doctorExperience);
+        printf("Qualification: %s\n", doctorTemp->doctorQualification);
+        printf("\n");
+        doctorTemp = doctorTemp->next;
+    }
+}
+
