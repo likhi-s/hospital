@@ -17,13 +17,13 @@ enum TreatmentManagementOptions
     DISPLAY_ALL_TREATMENTS,
     SEARCH_TREATMENT_BY_ID,
     SEARCH_TREATMENT_BY_NAME,
+    SORT_TREATMENT_BY_ID,
     EXIT_TREATMENT_MANAGEMENT
 };
 
 enum TreatmentUpdateOptions
 {
-    UPDATE_TREATMENT_ID = 1,
-    UPDATE_TREATMENT_NAME,
+    UPDATE_TREATMENT_NAME=1,
     UPDATE_TREATMENT_COST,
     UPDATE_TREATMENT_DURATION
 };
@@ -36,6 +36,7 @@ void updateTreatmentDetails();
 void displayTreatment();
 void searchByTreatmentId();
 void searchByTreatmentName();
+void sortTreatmentById();
 
 
 

@@ -25,7 +25,7 @@ void loginAsStaffManagementUser()
         while (true)
         {
             printf("\n--- Staff Management System ---\n");
-            printf("1. Add Staff\n2. Update Staff details\n3. Display Available Staff\n4. Search Staff by ID\n5. Search Staff by Role\n6. Exit from Staff Management\n");
+            printf("1. Add Staff\n2. Update Staff details\n3. Display Available Staff\n4. Search Staff by ID\n5. Search Staff by Role\n6. sort by Staff ID\n7. Exit from Staff Management\n");
             printf("Enter your option: ");
             scanf("%d", &option);
 
@@ -47,6 +47,9 @@ void loginAsStaffManagementUser()
                 break;
             case SEARCH_STAFF_BY_ROLE:
                 searchByStaffRole();
+                break;
+            case SORT_BY_STAFF_ID:
+                sortByStaffId();
                 break;
             case EXIT_STAFF_MANAGEMENT:
                 printf("Exiting from Staff Management menu.\n");
@@ -206,6 +209,7 @@ void displayStaffDetails()
         printf("Shift: %s\n", staffTemp->staffShift);
         printf("Salary: %f\n", staffTemp->staffSalary);
         printf("Contact Number: %s\n", staffTemp->staffContactNumber);
+        printf("\n");
         staffTemp = staffTemp->next;
     }
 }
@@ -227,6 +231,7 @@ void searchByStaffId()
             printf("Shift: %s\n", staffTemp->staffShift);
             printf("Salary: %f\n", staffTemp->staffSalary);
             printf("Contact Number: %s\n", staffTemp->staffContactNumber);
+            printf("\n");
             searchIdFound = 1;
             break;
         }
@@ -258,6 +263,7 @@ void searchByStaffRole()
             printf("Shift: %s\n", staffTemp->staffShift);
             printf("Salary: %f\n", staffTemp->staffSalary);
             printf("Contact Number: %s\n", staffTemp->staffContactNumber);
+            printf("\n");
             searchRoleFound = 1;
             break;
         }
@@ -267,5 +273,109 @@ void searchByStaffRole()
     if (!searchRoleFound)
     {
         printf("Staff with Role '%s' not found.\n", searchRole);
+    }
+}
+
+void sortByStaffId()
+{
+    if (staffHead == NULL)
+    {
+        printf("No staff found.\n");
+        return;
+    }
+    staff *tempHead = NULL, *tempTail = NULL, *current= staffHead;
+    while(current != NULL)
+    {
+        staff *newNode = (staff *) malloc(sizeof(staff));
+        if(!newNode)
+        {
+            printf("Memory Alloctaion Failed\n");
+            return;
+        }
+        *newNode = *current;
+        newNode->next = NULL;
+        if (tempHead == NULL)
+        {
+            tempHead = newNode;
+            tempTail = newNode;
+        }
+        else
+        {
+            tempTail->next = newNode;
+            tempTail = newNode;
+        }
+
+        current = current->next;
+    }
+
+    staff *sortedList = NULL;
+
+    staff *splitList(staff *head)
+    {
+        staff *slow = head, *fast = head->next;
+        while (fast != NULL && fast->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        staff *middle = slow->next;
+        slow->next = NULL;
+        return middle;
+    }
+
+    staff *mergeLists(staff *left, staff *right)
+    {
+        staff dummy;
+        staff *tail = &dummy;
+        dummy.next = NULL;
+
+        while (left != NULL && right != NULL)
+        {
+            if (left->staffId < right->staffId)
+            {
+                tail->next = left;
+                left = left->next;
+            }
+            else
+            {
+                tail->next = right;
+                right = right->next;
+            }
+            tail = tail->next;
+        }
+        tail->next = (left != NULL) ? left : right;
+        return dummy.next;
+    }
+
+
+    staff *mergeSort(staff *head)
+    {
+        if (head == NULL || head->next == NULL)
+        {
+            return head;
+        }
+
+        staff *middle = splitList(head);
+        staff *left = mergeSort(head);
+        staff *right = mergeSort(middle);
+        return mergeLists(left, right);
+    }
+
+
+    sortedList = mergeSort(tempHead);
+
+
+    printf("--- Staff Sorted by ID ---\n");
+    staff *staffTemp = sortedList;
+    while (staffTemp != NULL)
+    {
+        printf("Staff ID: %d\n", staffTemp->staffId);
+        printf("Name: %s\n", staffTemp->staffName);
+        printf("Role: %s\n", staffTemp->staffRole);
+        printf("Shift: %s\n", staffTemp->staffShift);
+        printf("Salary: %f\n", staffTemp->staffSalary);
+        printf("Contact Number: %s\n", staffTemp->staffContactNumber);
+        printf("\n");
+        staffTemp = staffTemp->next;
     }
 }

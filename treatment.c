@@ -24,7 +24,7 @@ void loginAsTreatmentAndPriceManagementUser()
         while (true)
         {
             printf("\n--- Treatment Management System ---\n");
-            printf("1. Add Treatment\n2. Update Treatment Details\n3. Display All Treatments\n4. Search Treatment by ID\n5. Search Treatment by Name\n6. Exit Treatment Management\n");
+            printf("1. Add Treatment\n2. Update Treatment Details\n3. Display All Treatments\n4. Search Treatment by ID\n5. Search Treatment by Name\n6. sort treatment by Id\n7. Exit Treatment Management\n");
             printf("Enter your option: ");
             scanf("%d", &option);
 
@@ -46,6 +46,9 @@ void loginAsTreatmentAndPriceManagementUser()
                 break;
             case SEARCH_TREATMENT_BY_NAME:
                 searchByTreatmentName();
+                break;
+            case SORT_TREATMENT_BY_ID:
+                sortTreatmentById();
                 break;
             case EXIT_TREATMENT_MANAGEMENT:
                 printf("Exiting from Treatment Management menu.\n");
@@ -163,6 +166,7 @@ void updateTreatmentDetails()
                 printf("Invalid choice.\n");
                 break;
             }
+
             printf("Required treatment details updated successfully.\n");
             break;
         }
@@ -184,13 +188,14 @@ void displayTreatment()
     }
 
     treatmentTemp = treatmentHead;
-    printf("\n--- Treatment Details ---\n");
+    printf("\n--- treatments Sorted by Name ---\n");
     while (treatmentTemp != NULL)
     {
         printf("Treatment ID: %d\n", treatmentTemp->treatmentId);
         printf("Name: %s\n", treatmentTemp->treatmentName);
         printf("Cost: %d\n", treatmentTemp->treatmentCost);
         printf("Duration: %d days\n", treatmentTemp->treatmentDuration);
+        printf("\n");
         treatmentTemp = treatmentTemp->next;
     }
 }
@@ -210,6 +215,7 @@ void searchByTreatmentId()
             printf("Name: %s\n", treatmentTemp->treatmentName);
             printf("Cost: %d\n", treatmentTemp->treatmentCost);
             printf("Duration: %d days\n", treatmentTemp->treatmentDuration);
+            printf("\n");
             searchIdFound = 1;
             break;
         }
@@ -238,6 +244,7 @@ void searchByTreatmentName()
             printf("Treatment ID: %d\n", treatmentTemp->treatmentId);
             printf("Cost: %d\n", treatmentTemp->treatmentCost);
             printf("Duration: %d days\n", treatmentTemp->treatmentDuration);
+            printf("\n");
             searchNameFound = 1;
             break;
         }
@@ -249,4 +256,118 @@ void searchByTreatmentName()
         printf("Treatment with Name '%s' not found.\n", searchName);
     }
 }
+void sortTreatmentById()
+{
+    if (treatmentHead == NULL)
+    {
+        printf("No treatments found.\n");
+        return;
+    }
 
+    treatment *tempHead = NULL, *tempTail = NULL, *current = treatmentHead;
+
+
+    while (current != NULL)
+    {
+        treatment *newNode = (treatment *)malloc(sizeof(treatment));
+        if (!newNode)
+        {
+            printf("Memory allocation failed\n");
+            return;
+        }
+
+        *newNode = *current;
+        newNode->next = NULL;
+
+        if (tempHead == NULL)
+        {
+            tempHead = newNode;
+            tempTail = newNode;
+        }
+        else
+        {
+            tempTail->next = newNode;
+            tempTail = newNode;
+        }
+
+        current = current->next;
+    }
+
+    treatment *sortedList = NULL;
+
+
+    treatment *splitList(treatment *head)
+    {
+        treatment *slow = head, *fast = head->next;
+        while (fast != NULL && fast->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        treatment *middle = slow->next;
+        slow->next = NULL;
+        return middle;
+    }
+
+
+    treatment *mergeLists(treatment *left, treatment *right)
+    {
+        treatment dummy;
+        treatment *tail = &dummy;
+        dummy.next = NULL;
+
+        while (left != NULL && right != NULL)
+        {
+            if (left->treatmentId < right->treatmentId)
+            {
+                tail->next = left;
+                left = left->next;
+            }
+            else
+            {
+                tail->next = right;
+                right = right->next;
+            }
+            tail = tail->next;
+        }
+        tail->next = (left != NULL) ? left : right;
+        return dummy.next;
+    }
+
+
+    treatment *mergeSort(treatment *head)
+    {
+        if (head == NULL || head->next == NULL)
+        {
+            return head;
+        }
+
+        treatment *middle = splitList(head);
+        treatment *left = mergeSort(head);
+        treatment *right = mergeSort(middle);
+        return mergeLists(left, right);
+    }
+
+    sortedList = mergeSort(tempHead);
+
+
+    printf("--- Treatments Sorted by ID ---\n");
+    treatment *temp = sortedList;
+    while (temp != NULL)
+    {
+        printf("Treatment ID: %d\n", temp->treatmentId);
+        printf("Name: %s\n", temp->treatmentName);
+        printf("Cost: %d\n", temp->treatmentCost);
+        printf("Duration: %d days\n", temp->treatmentDuration);
+        printf("\n");
+        temp = temp->next;
+    }
+
+
+    while (sortedList != NULL)
+    {
+        treatment *temp = sortedList;
+        sortedList = sortedList->next;
+        free(temp);
+    }
+}

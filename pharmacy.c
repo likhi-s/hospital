@@ -24,7 +24,7 @@ void loginAsPharmacyManagementUser()
     {
         while (true) {
             printf("\n--- Pharmacy Management System ---\n");
-            printf("1. Add Medicine\n2. Update Medicine Details\n3. Display Available Medicines\n4. Search Medicine by ID\n5. Search Medicine by Name\n6. Check Medicine Stock\n7. Exit from Pharmacy Management\n");
+            printf("1. Add Medicine\n2. Update Medicine Details\n3. Display Available Medicines\n4. Search Medicine by ID\n5. Search Medicine by Name\n6. Check Medicine Stock\n7. sort by medicine id\n8. Exit from Pharmacy Management\n");
             printf("Enter your option: ");
             scanf("%d", &option);
 
@@ -49,6 +49,9 @@ void loginAsPharmacyManagementUser()
                 break;
             case CHECK_STOCK:
                 checkMedicineStock();
+                break;
+            case SORT_BY_MEDICINE_ID:
+                sortByMedicineId();
                 break;
             case EXIT_PHARMACY_MANAGEMENT:
                 printf("Exiting from Pharmacy Management menu.\n");
@@ -198,7 +201,7 @@ void displayMedicineDetails()
     }
 
     pharmacyTemp = pharmacyHead;
-    printf("\n--- Medicine Details ---\n");
+    printf("\n--- Medicine sorted by name---\n");
     while (pharmacyTemp != NULL)
     {
         printf("Medicine ID: %d\n", pharmacyTemp->medicineId);
@@ -207,6 +210,7 @@ void displayMedicineDetails()
         printf("Stock Quantity: %d\n", pharmacyTemp->medicineStockQuantity);
         printf("Type: %s\n", pharmacyTemp->medicineType);
         printf("Dosage: %s\n", pharmacyTemp->medicineDosage);
+        printf("\n");
         pharmacyTemp = pharmacyTemp->next;
     }
 }
@@ -228,6 +232,7 @@ void searchByMedicineId()
             printf("Stock Quantity: %d\n", pharmacyTemp->medicineStockQuantity);
             printf("Type: %s\n", pharmacyTemp->medicineType);
             printf("Dosage: %s\n", pharmacyTemp->medicineDosage);
+            printf("\n");
             searchIdFound = 1;
             break;
         }
@@ -259,6 +264,7 @@ void searchByMedicineName()
             printf("Stock Quantity: %d\n", pharmacyTemp->medicineStockQuantity);
             printf("Type: %s\n", pharmacyTemp->medicineType);
             printf("Dosage: %s\n", pharmacyTemp->medicineDosage);
+            printf("\n");
             searchNameFound = 1;
             break;
         }
@@ -294,5 +300,107 @@ void checkMedicineStock()
     if (!stockFound)
     {
         printf("Medicine with ID %d not found.\n", id);
+    }
+}
+
+void sortByMedicineId()
+{
+    if (pharmacyHead == NULL)
+    {
+        printf("No medicines found.\n");
+        return;
+    }
+    pharmacy *tempHead = NULL, *tempTail = NULL, *current= pharmacyHead;
+    while(current != NULL)
+    {
+        pharmacy *newNode = (pharmacy *) malloc(sizeof(pharmacy));
+        if(!newNode)
+        {
+            printf("Memory Alloctaion Failed\n");
+            return;
+        }
+        *newNode = *current;
+        newNode->next = NULL;
+        if (tempHead == NULL)
+        {
+            tempHead = newNode;
+            tempTail = newNode;
+        }
+        else
+        {
+            tempTail->next = newNode;
+            tempTail = newNode;
+        }
+
+        current = current->next;
+    }
+
+    pharmacy *sortedList = NULL;
+
+    pharmacy *splitList(pharmacy *head)
+    {
+        pharmacy *slow = head, *fast = head->next;
+        while (fast != NULL && fast->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        pharmacy *middle = slow->next;
+        slow->next = NULL;
+        return middle;
+    }
+
+    pharmacy *mergeLists(pharmacy *left, pharmacy *right)
+    {
+        pharmacy dummy;
+        pharmacy *tail = &dummy;
+        dummy.next = NULL;
+
+        while (left != NULL && right != NULL)
+        {
+            if (left->medicineId < right->medicineId)
+            {
+                tail->next = left;
+                left = left->next;
+            }
+            else
+            {
+                tail->next = right;
+                right = right->next;
+            }
+            tail = tail->next;
+        }
+        tail->next = (left != NULL) ? left : right;
+        return dummy.next;
+    }
+
+
+    pharmacy *mergeSort(pharmacy *head)
+    {
+        if (head == NULL || head->next == NULL)
+        {
+            return head;
+        }
+
+        pharmacy *middle = splitList(head);
+        pharmacy *left = mergeSort(head);
+        pharmacy *right = mergeSort(middle);
+        return mergeLists(left, right);
+    }
+
+
+    sortedList = mergeSort(tempHead);
+    printf("--- medicines Sorted by ID ---\n");
+    pharmacy *pharmacyTemp = sortedList;
+    while (pharmacyTemp != NULL)
+    {
+        printf("Medicine ID: %d\n", pharmacyTemp->medicineId);
+        printf("Name: %s\n", pharmacyTemp->medicineName);
+        printf("Cost: %f\n", pharmacyTemp->medicineCost);
+        printf("Stock Quantity: %d\n", pharmacyTemp->medicineStockQuantity);
+        printf("Type: %s\n", pharmacyTemp->medicineType);
+        printf("Dosage: %s\n", pharmacyTemp->medicineDosage);
+        printf("\n");
+        pharmacyTemp = pharmacyTemp->next;
     }
 }

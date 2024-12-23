@@ -25,7 +25,7 @@ void loginAsPatientManagementUser()
         while (true)
         {
             printf("\n--- Patient Management System ---\n");
-            printf("1. Register patient\n2. Update patient details\n3. Display Available Patients\n4. Search Patient by ID\n5. Search Patient by Name\n6. Exit from Patient management\n");
+            printf("1. Register patient\n2. Update patient details\n3. Display Available Patients\n4. Search Patient by ID\n5. Search Patient by Name\n6. Sort By ID\n7. Exit from Patient management\n");
             printf("Enter your option: ");
             scanf("%d", &option);
 
@@ -45,6 +45,9 @@ void loginAsPatientManagementUser()
                 break;
             case SEARCH_PATIENT_BY_NAME:
                 searchByPatientName();
+                break;
+            case SORT_BY_PATIENT_ID:
+                sortPatientsById();
                 break;
             case EXIT_PATIENT_MANAGEMENT:
                 printf("Exiting from Patient Management menu.\n");
@@ -149,27 +152,27 @@ void updatePatientDetails()
 
             switch (choice)
             {
-            case 1:
+            case UPDATE_PATIENT_NAME:
                 printf("Enter New Patient Name: ");
                 scanf(" %[^\n]", patientTemp->patientName);
                 break;
-            case 2:
+            case UPDATE_PATIENT_GENDER:
                 printf("Enter New Gender: ");
                 scanf("%s", patientTemp->patientGender);
                 break;
-            case 3:
+            case UPDATE_PATIENT_AGE:
                 printf("Enter New Age: ");
                 scanf("%d", &patientTemp->patientAge);
                 break;
-            case 4:
+            case UPDATE_PATIENT_ADDRESS:
                 printf("Enter New Address: ");
                 scanf(" %[^\n]", patientTemp->patientAddress);
                 break;
-            case 5:
+            case UPDATE_PATIENT_CONTACT_NUMBER:
                 printf("Enter New Contact Number: ");
                 scanf("%s", patientTemp->patientContactNumber);
                 break;
-            case 6:
+            case UPDATE_PATIENT_EMERGENCY_CONTACT_NUMBER:
                 printf("Enter New Emergency Contact Number: ");
                 scanf("%s", patientTemp->patientEmergencyContactNumber);
                 break;
@@ -198,7 +201,7 @@ void displayPatientDetails()
     }
 
     patientTemp = patientHead;
-    printf("\n--- Patient Details ---\n");
+    printf("--- Patient Sorted by Name ---\n");
     while (patientTemp != NULL)
     {
         printf("Patient ID: %d\n", patientTemp->patientId);
@@ -208,6 +211,7 @@ void displayPatientDetails()
         printf("Address: %s\n", patientTemp->patientAddress);
         printf("Contact Number: %s\n", patientTemp->patientContactNumber);
         printf("Emergency Contact Number: %s\n", patientTemp->patientEmergencyContactNumber);
+        printf("\n");
         patientTemp = patientTemp->next;
     }
 }
@@ -223,13 +227,14 @@ void searchByPatientId()
     {
         if (patientTemp->patientId == id)
         {
-            printf("\n--- Patient Found ---\n");
+            printf("--- Patient Found ---\n");
             printf("Name: %s\n", patientTemp->patientName);
             printf("Gender: %s\n", patientTemp->patientGender);
             printf("Age: %d\n", patientTemp->patientAge);
             printf("Address: %s\n", patientTemp->patientAddress);
             printf("Contact Number: %s\n", patientTemp->patientContactNumber);
             printf("Emergency Contact Number: %s\n", patientTemp->patientEmergencyContactNumber);
+            printf("\n");
             searchIdFound = 1;
             break;
         }
@@ -254,7 +259,7 @@ void searchByPatientName()
     {
         if (strcasecmp(searchName, patientTemp->patientName) == 0)
         {
-            printf("\n--- Patient Found ---\n");
+            printf("--- Patient Found ---\n");
             printf("Patient ID: %d\n", patientTemp->patientId);
             printf("Name: %s\n", patientTemp->patientName);
             printf("Gender: %s\n", patientTemp->patientGender);
@@ -262,6 +267,7 @@ void searchByPatientName()
             printf("Address: %s\n", patientTemp->patientAddress);
             printf("Contact Number: %s\n", patientTemp->patientContactNumber);
             printf("Emergency Contact Number: %s\n", patientTemp->patientEmergencyContactNumber);
+            printf("\n");
             searchNameFound = 1;
             break;
         }
@@ -271,5 +277,122 @@ void searchByPatientName()
     if (!searchNameFound)
     {
         printf("Patient with Name '%s' not found.\n", searchName);
+    }
+}
+
+void sortPatientsById()
+
+{
+    if (patientHead == NULL)
+    {
+        printf("No patients found.\n");
+        return;
+    }
+
+
+    patient *tempHead = NULL, *tempTail = NULL, *current = patientHead;
+
+    while (current != NULL)
+    {
+
+        patient *newNode = (patient *)malloc(sizeof(patient));
+        if (!newNode)
+        {
+            printf("Memory allocation failed\n");
+            return;
+        }
+
+        *newNode = *current;
+        newNode->next = NULL;
+
+        if (tempHead == NULL)
+        {
+            tempHead = newNode;
+            tempTail = newNode;
+        }
+        else
+        {
+            tempTail->next = newNode;
+            tempTail = newNode;
+        }
+
+        current = current->next;
+    }
+
+    patient *sortedList = NULL;
+
+    patient *splitList(patient *head)
+    {
+        patient *slow = head, *fast = head->next;
+        while (fast != NULL && fast->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        patient *middle = slow->next;
+        slow->next = NULL;
+        return middle;
+    }
+
+    patient *mergeLists(patient *left, patient *right)
+    {
+        patient dummy;
+        patient *tail = &dummy;
+        dummy.next = NULL;
+
+        while (left != NULL && right != NULL)
+        {
+            if (left->patientId < right->patientId)
+            {
+                tail->next = left;
+                left = left->next;
+            }
+            else
+            {
+                tail->next = right;
+                right = right->next;
+            }
+            tail = tail->next;
+        }
+        tail->next = (left != NULL) ? left : right;
+        return dummy.next;
+    }
+
+    patient *mergeSort(patient *head)
+    {
+        if (head == NULL || head->next == NULL)
+        {
+            return head;
+        }
+
+        patient *middle = splitList(head);
+        patient *left = mergeSort(head);
+        patient *right = mergeSort(middle);
+        return mergeLists(left, right);
+    }
+
+    sortedList = mergeSort(tempHead);
+
+
+    printf("--- Patients Sorted by ID ---\n");
+    patient *temp = sortedList;
+    while (temp != NULL)
+    {
+        printf("Patient ID: %d\n", temp->patientId);
+        printf("Name: %s\n", temp->patientName);
+        printf("Gender: %s\n", temp->patientGender);
+        printf("Age: %d\n", temp->patientAge);
+        printf("Address: %s\n", temp->patientAddress);
+        printf("Contact Number: %s\n", temp->patientContactNumber);
+        printf("Emergency Contact Number: %s\n", temp->patientEmergencyContactNumber);
+        printf("\n");
+        temp = temp->next;
+    }
+
+    while (sortedList != NULL)
+    {
+        patient *temp = sortedList;
+        sortedList = sortedList->next;
+        free(temp);
     }
 }

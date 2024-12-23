@@ -20,6 +20,7 @@ enum StaffManagementMenu
     DISPLAY_AVAILABLE_STAFF,
     SEARCH_STAFF_BY_ID,
     SEARCH_STAFF_BY_ROLE,
+    SORT_BY_STAFF_ID,
     EXIT_STAFF_MANAGEMENT
 } ;
 
@@ -39,7 +40,7 @@ void updateStaffDetails();
 void displayStaffDetails();
 void searchByStaffId();
 void searchByStaffRole();
-
+void sortByStaffId();
 
 
 #endif // STAFF_H

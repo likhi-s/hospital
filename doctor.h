@@ -22,6 +22,7 @@ enum DoctorManagementMenu
     DISPLAY_AVAILABLE_DOCTORS,
     SEARCH_DOCTOR_BY_ID,
     SEARCH_DOCTOR_BY_SPECIALIZATION,
+    SORT_DOCTORS_BY_ID,
     EXIT_DOCTOR_MANAGEMENT
 } ;
 
@@ -43,6 +44,8 @@ void updateDoctorDetails();
 void displayDoctorDetails();
 void searchByDoctorId();
 void searchByDoctorSpecialization();
+void sortDoctorsById();
+
 
 
 
